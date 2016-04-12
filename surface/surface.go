@@ -33,9 +33,12 @@ func main() {
             if err { continue }
             
             z := (az + bz + cz + dz) / 4
-            c := 0x0000ff + (0xff0000 - 0x0000ff) / 2 * (z + 1) 
-            fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g' style='fill:%x'/>\n",
-                ax, ay, bx, by, cx, cy, dx, dy, uint32(c))
+            c := uint32(0x0000ff + (0xff0000 - 0x0000ff) / 2 * (z + 1))
+            r := uint8(c & 0xff)
+            g := uint8((c >> 8) & 0xff)
+            b := uint8((c >> 16) & 0xff)             
+            fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g' style='fill:rgb(%d, %d, %d)'/>\n",
+                ax, ay, bx, by, cx, cy, dx, dy, r, g, b)
         }
     }
     fmt.Println("</svg>")
