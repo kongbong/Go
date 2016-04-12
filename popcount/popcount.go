@@ -30,3 +30,25 @@ func PopCount2(x uint64) int {
     }
     return total
 }
+
+// PopCount3 returns the population count (number of set bits) of x.
+func PopCount3(x uint64) int {
+    var total int
+    for x > 0 {
+        if x & 1 == 1 {
+            total++
+        }
+        x = x >> 1        
+    }
+    return total
+}
+
+// PopCount4 returns the population count (number of set bits) of x.
+func PopCount4(x uint64) int {
+    var total int
+    for x > 0 {
+        total ++
+        x = x&(x-1)
+    }
+    return total
+}
