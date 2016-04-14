@@ -21,6 +21,7 @@ func main() {
     fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' " +
         "style='stroke: grey; fill: white; stroke-width: 0.7' "+
         "width='%d' height='%d'>", width, height)
+    var maxz, minz float64
     for i := 0; i < cells; i++ {
         for j := 0; j < cells; j++ {
             ax, ay, az, err := corner(i+1, j)
@@ -33,15 +34,22 @@ func main() {
             if err { continue }
             
             z := (az + bz + cz + dz) / 4
-            c := uint32(0x0000ff + (0xff0000 - 0x0000ff) / 2 * (z + 1))
-            r := uint8(c & 0xff)
+            if z > maxz {
+                maxz = z
+            }
+            if z < minz {
+                minz = z
+            }
+            c := uint32(0xff0000 - (0xff0000 - 0x0000ff) / 2 * (z + 1))
+            b := uint8(c & 0xff)
             g := uint8((c >> 8) & 0xff)
-            b := uint8((c >> 16) & 0xff)             
+            r := uint8((c >> 16) & 0xff)             
             fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g' style='fill:rgb(%d, %d, %d)'/>\n",
                 ax, ay, bx, by, cx, cy, dx, dy, r, g, b)
         }
     }
     fmt.Println("</svg>")
+    fmt.Println(maxz, minz)
 }
 
 func corner(i, j int) (float64, float64, float64, bool) {
